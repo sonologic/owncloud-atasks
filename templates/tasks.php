@@ -9,7 +9,6 @@
 	<input type="button" id="tasks_order_label" value="<?php p($l->t('Order Label')); ?>">
 </div>
 <div id="tasks_lists" class="leftcontent">
-	<div class="all">All</div>
 	<div class="done">Done</div>
 </div>
 <div id="tasks_list" class="rightcontent">
