@@ -537,6 +537,7 @@ $(document).ready(function(){
 		$.post(OC.filePath('atasks', 'ajax', 'addtask.php'),{text:input,calendar:calendar_id},function(jsondata){
 			if(jsondata.status == 'success'){
 				$('#tasks_list').append(OC.ATasks.create_task_div(jsondata.task));
+				$('#tasks_newtask').val('');
 			}
 			else{
 				alert(jsondata.data.message);
