@@ -385,6 +385,7 @@ $(document).ready(function(){
 		});
 		OCCategories.changed = OC.ATasks.categoriesChanged;
 		OCCategories.app = 'calendar';
+		$("#tasks_lists").children()[0].click();
 	});
 
 	/*-------------------------------------------------------------------------
