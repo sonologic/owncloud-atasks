@@ -10,6 +10,7 @@
 </div>
 <div id="tasks_lists" class="leftcontent">
 	<div class="done">Done</div>
+	<div class="create_new"><input type="text" name="create_new_name" value="new calendar"/><span id="create_new_confirm">+</span></div>
 </div>
 <div id="tasks_list" class="rightcontent">
 <p class="loading"><?php p($l->t('Loading tasks...')) ?></p>

@@ -499,5 +499,34 @@ $(document).ready(function(){
 		return false;
 	});
 
+	$('#create_new_confirm').click(function() {
+		var name = $("input[name='create_new_name']").val();
+
+		if(name!='' && name!='new calendar') {
+			$.post(OC.filePath('atasks', 'ajax', 'addcalendar.php'), {name:name}, function(jsondata) {
+				if(jsondata.status == "success") {
+					$("input[name='create_new_name']").val('new calendar');
+					calendars = jsondata.calendars;
+					$('#tasks_lists div:not(".all"):not(".done"):not(".create_new")').remove();
+					$.each(calendars, function(i, calendar) {
+						OC.ATasks.List.create_cal_div(calendar).insertBefore('#tasks_lists .done');
+					});
+				} else {
+					alert(jsondata.message);
+				}
+			});
+		}
+	});
+
+	$("input[name='create_new_name']").click(function() {
+		if( $("input[name='create_new_name']").val() == 'new calendar')
+			$("input[name='create_new_name']").val('');
+	});
+	$("input[name='create_new_name']").focusout(function() {
+		if( $("input[name='create_new_name']").val() == '')
+			$("input[name='create_new_name']").val('new calendar');
+	});
+	
+
 	OCCategories.app = 'calendar';
 });
