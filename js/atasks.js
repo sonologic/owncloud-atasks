@@ -143,6 +143,42 @@ OC.ATasks = {
 				});
 			})
 			.appendTo(task_container);
+		var calendarObject = OC.ATasks.getCalendarById(task.calendar);
+		var calendarName = 'error';
+		var calendarId = -1;
+		if(calendarObject!=null) {
+			calendarName=calendarObject.displayname;
+			calendarId=calendarObject.id;
+		}
+		$('<select placeholder="'+t('tasks', 'Calendar')+'">')
+			.addClass('calendar')
+			.append('<option value="'+calendarId+'">'+calendarName+'</option>')
+			.focusin(function() {
+				var task = $(this).closest('.task').data('task');
+				$(this).find('option').each(function() {
+					if($(this).val()!=task.calendar)
+						$(this).remove();
+				});
+				for(calendarIdx in calendars) {
+					var calendar = calendars[calendarIdx];
+					if(calendar.id!=task.calendar)
+						$(this).append('<option value="'+calendar.id+'">'+calendar.displayname+'</option>');
+				}
+			})
+			.change(function() {
+				var task = $(this).closest('.task').data('task');
+				var calendar = $(this).val();
+				$.post(OC.filePath('atasks', 'ajax', 'update_property.php'), {id:task.id, type:'calendar', calendar:calendar}, function(jsondata){
+					if(jsondata.status == 'success') {
+						task.calendar = calendar;
+						task_container.find('div.calendar').text(calendar);
+						task_container.find('.task_less').click();
+						task_container.hide();
+					}
+				});
+			})
+			.appendTo(task_container);
+
 		return task_container;
 	},
 	filterText:function(text, find_filter) {
@@ -283,6 +319,7 @@ OC.ATasks = {
 		$task.find('input.categories').show();
 		$task.find('div.location').hide();
 		$task.find('input.location').show();
+		$task.find('select.calendar').show();
 	},
 	lessClickHandler:function(event){
 		var $task = $(this).closest('.task'),
@@ -294,6 +331,7 @@ OC.ATasks = {
 		$task.find('input.categories').hide();
 		$task.find('div.location').show();
 		$task.find('input.location').hide();
+		$task.find('select.calendar').hide();
 	},
 	deleteClickHandler:function(event){
 		var $task = $(this).closest('.task'),
@@ -332,6 +370,14 @@ OC.ATasks = {
 		categories = $.map(newcategories, function(v) {return v;});
 		console.log('Task categories changed to: ' + categories);
 		$('input.categories').multiple_autocomplete('option', 'source', categories);
+	},
+	getCalendarById:function(id) {
+		for(calendarIndex in calendars) {
+			if(calendars[calendarIndex].id == id) {
+				return calendars[calendarIndex];
+			}
+		}
+		return null;
 	},
 	List: {
 		create_list_div:function(category){

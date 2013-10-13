@@ -16,6 +16,7 @@ $property = $_POST['type'];
 $vcalendar = OC_Calendar_App::getVCalendar( $id );
 
 $vtodo = $vcalendar->VTODO;
+$edit=true;
 switch($property) {
 	case 'summary':
 		$summary = $_POST['summary'];
@@ -58,11 +59,19 @@ switch($property) {
 		$checked = $_POST['checked'];
 		OC_Task_App::setComplete($vtodo, $checked ? '100' : '0', null);
 		break;
+	case 'calendar':
+		// @todo proper input validation
+		$edit=false;
+		$calid=$_POST['calendar']+0;
+		OC_Calendar_Object::moveToCalendar($id, $calid);
+		$vtodo->setString('CALENDAR',$calid);
+		break;
 	default:
 		OCP\JSON::error(array('data'=>array('message'=>'Unknown type')));
 		exit();
 }
-OC_Calendar_Object::edit($id, $vcalendar->serialize());
+if($edit)
+	OC_Calendar_Object::edit($id, $vcalendar->serialize());
 
 $user_timezone = OC_Calendar_App::getTimezone();
 $task_info = OC_Task_App::arrayForJSON($id, $vtodo, $user_timezone);
