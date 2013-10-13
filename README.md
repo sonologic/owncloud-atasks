@@ -9,6 +9,8 @@ Goals are:
 - better integration with task apps on android
 - less bugs
 
+Currently, the code is in a very preliminary state.
+
 Installation
 ============
 
