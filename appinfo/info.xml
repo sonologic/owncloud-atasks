@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<info>
+	<id>atasks</id>
+	<name>ATasks</name>
+	<version>0.1</version>
+	<licence>AGPL</licence>
+	<author>Koen Martens</author>
+	<require>4.93</require>
+	<shipped>true</shipped>
+	<description>Advanced tasks view from calendar</description>
+</info>
