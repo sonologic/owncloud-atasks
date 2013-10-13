@@ -344,8 +344,11 @@ OC.ATasks = {
 		create_cal_div:function(calendar){
 			return $('<div id="cal-list-'+calendar['id']+'">').text(calendar['displayname'])
 				.click(function(){
+					var id = $(this).attr('id').substring(9);
+
 					$('#tasks_lists div').removeClass('active');
-					OC.ATasks.filterText($(this).attr('id').substring(9), 'div.calendar');
+					OC.ATasks.filterText(id, 'div.calendar');
+					$("#tasks_lists").data('active_id',id);
 					$(this).addClass('active');
 				});
 		}
@@ -483,7 +486,8 @@ $(document).ready(function(){
 
 	$('#tasks_addtask').click(function(){
 		var input = $('#tasks_newtask').val();
-		$.post(OC.filePath('atasks', 'ajax', 'addtask.php'),{text:input},function(jsondata){
+		var calendar_id = $("#tasks_lists").data('active_id');
+		$.post(OC.filePath('atasks', 'ajax', 'addtask.php'),{text:input,calendar:calendar_id},function(jsondata){
 			if(jsondata.status == 'success'){
 				$('#tasks_list').append(OC.ATasks.create_task_div(jsondata.task));
 			}

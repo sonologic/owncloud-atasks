@@ -5,9 +5,12 @@ OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('tasks');
 OCP\JSON::callCheck();
 
-$calendars = OC_Calendar_Calendar::allCalendars(OCP\User::getUser(), true);
-$first_calendar = reset($calendars);
-$cid = $first_calendar['id'];
+//$calendars = OC_Calendar_Calendar::allCalendars(OCP\User::getUser(), true);
+//$first_calendar = reset($calendars);
+//$cid = $first_calendar['id'];
+
+// @todo: validate
+$cid = $_POST['calendar']+0;
 
 $input = $_POST['text'];
 $request = array();
