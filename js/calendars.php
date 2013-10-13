@@ -6,6 +6,10 @@
  * See the COPYING-README file.
  */
 
+function cmp($a, $b) {
+	return strcmp($a['displayname'], $b['displayname']);
+}
+
 OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('atasks');
 
@@ -17,5 +21,7 @@ header("Cache-Control: no-cache, must-revalidate");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
 
 $calendars = OC_Calendar_Calendar::allCalendars(OCP\User::getUser(), true);
+
+usort($calendars, 'cmp');
 
 echo ("var calendars =". json_encode($calendars));

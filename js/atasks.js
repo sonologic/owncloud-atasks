@@ -371,10 +371,7 @@ $(document).ready(function(){
 			$('#tasks_list div').first().addClass('active');
 		}
 		$.each(calendars, function(i, calendar) {
-			$('#tasks_lists .all').after(OC.ATasks.List.create_cal_div(calendar));
-		});
-		$('#tasks_lists .all').click(function(){
-			$('#tasks_lists .active').click();
+			OC.ATasks.List.create_cal_div(calendar).insertBefore('#tasks_lists .done');
 		});
 		$('#tasks_lists .done').click(function(){
 			var filter = !$(this).hasClass('active');
