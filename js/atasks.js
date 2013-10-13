@@ -59,6 +59,10 @@ OC.ATasks = {
 					.text(category)
 				);
 		});
+		var $calendar = $('<div>')
+				.addClass('calendar')
+				.appendTo(task_container);
+		$calendar.text(task['calendar']);
 		task_container.find('.task_more').click(OC.ATasks.moreClickHandler);
 		task_container.find('.task_less').click(OC.ATasks.lessClickHandler);
 		var description = $('<textarea>')
@@ -141,19 +145,23 @@ OC.ATasks = {
 			.appendTo(task_container);
 		return task_container;
 	},
-	filter:function(tag, find_filter) {
-		var tag_text = $(tag).text();
-		var filter = !$(tag).hasClass('active');
-		OC.ATasks.filterUpdate(filter, function(task_container){
+	filterText:function(text, find_filter) {
+		var tag_text = text;
+		OC.ATasks.filterUpdate(true, function(task_container){
 			var found = 0;
 			task_container.find(find_filter).each(function(){
 				if ($(this).text() == tag_text) {
-					$(this).toggleClass('active');
+					$(this).removeClass('active');
+					$(this).addClass('active');
 					found = 1;
 				}
 			});
 			return found;
 		});
+	},
+	filter:function(tag, find_filter) {
+		var tag_text = $(tag).text();
+		OC.ATasks.filterText(tag_text, find_filter);
 	},
 	filterUpdate:function(filter, find_filter) {
 		var show_count = $('#tasks_list').data('show_count');
@@ -170,10 +178,17 @@ OC.ATasks = {
 			else {
 				hide_count+=found;
 			}
+/*
 			if (hide_count == show_count) {
 				task_container.show();
 			}
 			else {
+				task_container.hide();
+			}
+*/
+			if(found) {
+				task_container.show();
+			} else {
 				task_container.hide();
 			}
 			task_container.data('show_count', hide_count);
@@ -325,6 +340,14 @@ OC.ATasks = {
 					OC.ATasks.filter(this, 'div.categories .tag');
 					$(this).toggleClass('active');
 				});
+		},
+		create_cal_div:function(calendar){
+			return $('<div id="cal-list-'+calendar['id']+'">').text(calendar['displayname'])
+				.click(function(){
+					$('#tasks_lists div').removeClass('active');
+					OC.ATasks.filterText($(this).attr('id').substring(9), 'div.calendar');
+					$(this).addClass('active');
+				});
 		}
 	}
 };
@@ -347,8 +370,8 @@ $(document).ready(function(){
 		if( $('#tasks_list div').length > 0 ){
 			$('#tasks_list div').first().addClass('active');
 		}
-		$.each(categories, function(i, category) {
-			$('#tasks_lists .all').after(OC.ATasks.List.create_list_div(category));
+		$.each(calendars, function(i, calendar) {
+			$('#tasks_lists .all').after(OC.ATasks.List.create_cal_div(calendar));
 		});
 		$('#tasks_lists .all').click(function(){
 			$('#tasks_lists .active').click();
